@@ -98,4 +98,4 @@ async def cf(ctx, *, args):
             await ctx.send(f"Tails, {opponent_username} wins!")
 
         # Update balances in the JSON file
-        update_money_balance(sender_money_balances)
+        update_money_balance(sender_money_balances) 

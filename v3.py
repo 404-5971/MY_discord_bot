@@ -20,6 +20,8 @@ from commands.sell import sell
 from commands.leaderboard import *
 from commands.connect4 import connect4
 from commands.stock import stock
+#DEV
+from commands.bj_DEV import bj
 
 from stocks.graph import draw_graph
 from stocks.RNG import stock1
@@ -352,6 +354,8 @@ async def async_timer1():
         UP_stock_price = generate_stock_price()
         DOWN_stock_price = DOWN()
         GAY_stock_price = get_gayness()
+
+bot.add_command(bj)
 
 #damn brit
 bot.run("MTIzMDk2MjI2OTc0ODQ2NTY2Ng.G99PQ1.04Ch0VvwZbQqS0ZnbPKMjjAra8t2dHv38M9BQ0")
