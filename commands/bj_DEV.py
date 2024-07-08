@@ -111,7 +111,7 @@ def player_turn(current_total, player_hand, dealer_hand, deck, bet, split_hands=
         print('Invalid input')
         player_turn(current_total, player_hand, dealer_hand, deck, bet, split_hands)
 
-def dealer_turn(dealer_hand, deck, player_hand, bet):
+def dealer_turn(dealer_hand, deck, player_hand):
     dealer_total = sum(get_card_value(card) for card in dealer_hand)
     while dealer_total < 17:
         dealer_hand.append(deck.pop(0))
