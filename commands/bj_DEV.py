@@ -27,29 +27,54 @@ def deal_hand(deck, bet):
     dealer_hand = [deck.pop(0), deck.pop(0)]
     print(f'\nDealer card: {dealer_hand[0]}')
     print(f'Player hand: {player_hand}')
-    player_total = sum(get_card_value(card) for card in player_hand)
+    player_total = get_hand_value(player_hand)
     print(f'Player total: {player_total}')
     player_turn(player_total, player_hand, dealer_hand, deck, bet)
 
 # Function to get the card value
+def get_hand_value(hand, current_total=0):
+    for card in hand:            
+        if card == 'Ace':
+            # Determine the value of the Ace based on the current total
+            if current_total + 11 <= 21:
+                current_total += 11
+            else:
+                current_total += 1
+        elif card in ['Jack', 'Queen', 'King']:
+            current_total += 10
+        else:
+            current_total += int(card)
+    if current_total > 21:
+        for card in hand:
+            if card == 'Ace':
+                current_total -= 10
+                if current_total <= 21:
+                    break
+    return current_total
+
 def get_card_value(card, current_total=0):
     if card == 'Ace':
         # Determine the value of the Ace based on the current total
-        return 1 if current_total + 11 > 21 else 11
+        if current_total + 11 <= 21:
+            return 11
+        else:
+            return 1
     elif card in ['Jack', 'Queen', 'King']:
         return 10
     else:
         return int(card)
 
 # Function to check win/lose conditions
-def check_win_lose(dealer_hand, player_hand):
-    dealer_sum = sum(get_card_value(card) for card in dealer_hand)
-    player_sum = sum(get_card_value(card) for card in player_hand)
+def check_win_lose(dealer_hand, player_hand, FirstHand):
+    dealer_sum = get_hand_value(dealer_hand)
+    player_sum = get_hand_value(player_hand)
     if player_sum > 21:
         print('Bust! You lose.')
     elif dealer_sum > 21:
         print('Dealer bust! You win!')
     elif player_sum > dealer_sum:
+        if FirstHand == True:
+            print('Blackjack! You win!')
         print('You win!')
     elif player_sum < dealer_sum:
         print('Dealer wins!')
@@ -58,18 +83,19 @@ def check_win_lose(dealer_hand, player_hand):
 
 def player_turn(current_total, player_hand, dealer_hand, deck, bet, split_hands=None, FirstHand=True):
     if split_hands is None:
-        split_hands = []        
+        split_hands = []      
+
     if current_total == 21 and FirstHand == True:
-        print('Blackjack! You win!')
+        dealer_turn(dealer_hand, deck, player_hand, FirstHand)
         return
-    
+
     if current_total > 21:
         print('Bust! You lose.')
         print(current_total)
         return
     
     if current_total == 21:
-        dealer_turn(dealer_hand, deck, player_hand)
+        dealer_turn(dealer_hand, deck, player_hand, False)
         return
 
     if len(player_hand) == 2 and get_card_value(player_hand[0]) == get_card_value(player_hand[1]):
@@ -79,30 +105,31 @@ def player_turn(current_total, player_hand, dealer_hand, deck, bet, split_hands=
 
     if action == 'hit':
         player_hand.append(deck.pop(0))
-        current_total = sum(get_card_value(card, sum(get_card_value(c) for c in player_hand)) for card in player_hand)
+        current_total = get_hand_value(player_hand)
         print(f'Player hand: {player_hand}')
         print(f'Player total: {current_total}')
         player_turn(current_total, player_hand, dealer_hand, deck, bet, split_hands, False)
     elif action == 'stand':
         if split_hands:
             next_hand = split_hands.pop(0)
-            player_turn(sum(get_card_value(card) for card in next_hand), next_hand, dealer_hand, deck, bet, split_hands, False)
+            player_turn(get_hand_value(next_hand), next_hand, dealer_hand, deck, bet, split_hands, False)
         else:
-            dealer_turn(dealer_hand, deck, player_hand)
+            dealer_turn(dealer_hand, deck, player_hand, False)
     elif action == 'double':
         bet *= 2
         player_hand.append(deck.pop(0))
-        current_total = sum(get_card_value(card, sum(get_card_value(c) for c in player_hand)) for card in player_hand)
+        current_total = get_hand_value(player_hand)
         print(f'Player hand: {player_hand}')
         print(f'Player total: {current_total}')
         print(f'Bet: {bet}')
+        dealer_turn(dealer_hand, deck, player_hand, False)
     elif action == 'split':
         if len(player_hand) == 2 and get_card_value(player_hand[0]) == get_card_value(player_hand[1]):
             hand1 = [player_hand[0]]
             hand2 = [player_hand[1]]
             split_hands = [hand2]
             print(f'First hand: {hand1}')
-            player_turn(sum(get_card_value(card) for card in hand1), hand1, dealer_hand, deck, bet, split_hands, False)
+            player_turn(get_hand_value(hand1), hand1, dealer_hand, deck, bet, split_hands, False)
         else:
             print('You cannot split this hand.')
             player_turn(current_total, player_hand, dealer_hand, deck, bet, split_hands, False)
@@ -110,14 +137,15 @@ def player_turn(current_total, player_hand, dealer_hand, deck, bet, split_hands=
         print('Invalid input')
         player_turn(current_total, player_hand, dealer_hand, deck, bet, split_hands, False)
 
-def dealer_turn(dealer_hand, deck, player_hand):
-    dealer_total = sum(get_card_value(card) for card in dealer_hand)
+def dealer_turn(dealer_hand, deck, player_hand, FirstHand):
+    dealer_total = get_hand_value(dealer_hand)
     while dealer_total < 17:
         dealer_hand.append(deck.pop(0))
-        dealer_total = sum(get_card_value(card) for card in dealer_hand)
+        dealer_total = 0
+        dealer_total = get_hand_value(dealer_hand)
     print(f'Dealer hand: {dealer_hand}')
     print(f'Dealer total: {dealer_total}')
-    check_win_lose(dealer_hand, player_hand)
+    check_win_lose(dealer_hand, player_hand, FirstHand)
 
 # Main function
 def main():
