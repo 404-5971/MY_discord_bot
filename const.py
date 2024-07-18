@@ -2,10 +2,11 @@ import os
 import csv
 import datetime
 import traceback
+import openai
 
 dirs = [] 
 
-ROOT_DIR = 'C:\VS_Code\MY_discord_bot' 
+ROOT_DIR = 'C:\VS_Code/MY_discord_bot' 
 dirs.append(ROOT_DIR)
 
 LICHESS_JSON_FILEPATH = ROOT_DIR + '/lichess_accounts.json'
@@ -60,8 +61,9 @@ dirs.append(STOCK_HISTORY_FILE)
 
 EXCEPTION_MESSAGE = 'Something went wrong, please take a screen shot of the messages regarding the error, and use the `$bug` command to report it. Any addetional information would be helpful.'
 
-
-
+UNSPLASH_ACCESS_KEY = 'Hml8JmR7UZk1bxjqVnac99UdBRGId69CUbtdHmC2aW0'
+DEV_BOT_TOKEN = "MTIzMDk2MjI2OTc0ODQ2NTY2Ng.G99PQ1.04Ch0VvwZbQqS0ZnbPKMjjAra8t2dHv38M9BQ0"
+PROD_BOT_TOKEN = 'MTE3NTg5MDY0NDE5MTk1NzAxMw.GZtdjv.4039BrLsym-_rBJd1OV8W7GdSVysVomGA9xHC4'
 
 def write_exception(traceback):
     current_time = datetime.datetime.now()

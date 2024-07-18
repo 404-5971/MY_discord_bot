@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import csv
 import asyncio
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
 import os
 import random
 import openai
@@ -20,8 +20,7 @@ from commands.sell import sell
 from commands.leaderboard import *
 from commands.connect4 import connect4
 from commands.stock import stock
-#DEV
-from commands.bj_DEV import bj
+from commands.bj import bj
 
 from stocks.graph import draw_graph
 from stocks.RNG import stock1
@@ -31,12 +30,11 @@ from stocks.UP import *
 from stocks.DOWN import DOWN
 from stocks.GAY import get_gayness
 
-from const import CACHE_DIR, TIMEOUT_COUNT_DIR, EXCEPTION_MESSAGE, STOCK_GRAPH_PIC
-
-from write_exception import write_exception
+from const import CACHE_DIR, TIMEOUT_COUNT_DIR, EXCEPTION_MESSAGE, STOCK_GRAPH_PIC, UNSPLASH_ACCESS_KEY, DEV_BOT_TOKEN, PROD_BOT_TOKEN
 
 openai.api_key = 'sk-krazykai-bot-vtzun36Z4wPOp524MQp3T3BlbkFJAwOW7RkfZrjZIr3YVu5y'
-UNSPLASH_ACCESS_KEY = 'Hml8JmR7UZk1bxjqVnac99UdBRGId69CUbtdHmC2aW0'
+
+from write_exception import write_exception
 
 # Record the start time
 start_time = time.time()
@@ -358,7 +356,7 @@ async def async_timer1():
 bot.add_command(bj)
 
 #damn brit
-bot.run("MTIzMDk2MjI2OTc0ODQ2NTY2Ng.G99PQ1.04Ch0VvwZbQqS0ZnbPKMjjAra8t2dHv38M9BQ0")
+bot.run(DEV_BOT_TOKEN)
 
 #eli bot
-#bot.run('MTE3NTg5MDY0NDE5MTk1NzAxMw.GZtdjv.4039BrLsym-_rBJd1OV8W7GdSVysVomGA9xHC4')
+#bot.run(PROD_BOT_TOKEN)
